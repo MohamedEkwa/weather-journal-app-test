@@ -11,17 +11,17 @@ let d = new Date();
 let newDate = d.getMonth() + 1 + "." + d.getDate() + "." + d.getFullYear();
 
 //********************************************************************************************************** */
+
 /* Function to POST data */
 const postData = async (url = "") => {
   //   console.log(data);
 
-  const options = {
+  const response = await fetch(url,  {
     method: "POST", // *GET, POST, PUT, DELETE, etc.
     credentials: "same-origin", // include, *same-origin, omit
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(postData), // body data type must match "Content-Type" header
-  };
-  const response = await fetch(url, options);
+  });
 
   try {
     const newData = await response.json();
