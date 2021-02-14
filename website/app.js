@@ -1,36 +1,99 @@
-/* Global Variables */
-const apiKey = "5568b9ccb5f0afd175d794d5d1863243";
-// const zipcode = document.querySelector("#zip");
-const zipcode = 85005;
-const url = `http://api.openweathermap.org/data/2.5/weather?zip=${zipcode}&APPID=${apiKey}`;
-// const feeling = document.querySelector("#feelings");
-// console.log(url);
+const url = "http://api.openweathermap.org/data/2.5/weather?zip=";
+const key_code = "&appid=5568b9ccb5f0afd175d794d5d1863243";
 
-// Create a new date instance dynamically with JS
 let d = new Date();
 let newDate = d.getMonth() + 1 + "." + d.getDate() + "." + d.getFullYear();
 
-//********************************************************************************************************** */
+let date = document.querySelector("#date");
+let temp = document.querySelector("#temp");
+let content = document.querySelector("#content");
+let feelings = document.querySelector("#feelings");
 
-/* Function to POST data */
-const postData = async (url = "") => {
-  //   console.log(data);
+// When you press 'generate'
+document.getElementById("generate").addEventListener("click", (e) => {
+  e.preventDefault();
+  // get user input values
 
-  const response = await fetch(url,  {
+
+
+  // console.log(zip);
+  const feelings = document.getElementById("#feelings").value;
+  const zip = document.getElementById("#zip");
+
+  user_data(url, zip, key_code)
+    .then(function (user_data) {
+      // add data to POST request
+      postData("/add", { date: newDate, temp: user_data.main.temp, feelings });
+    })
+    .then(function () {
+      update_UI();
+    });
+  // reset form
+  // form.reset();
+});
+
+// Send user_data to a server
+const user_data = async (url, zip, key_code) => {
+  // res equals to the result of fetch function
+  const res = await fetch(url, zip, key_code);
+  try {
+    // userData equals to the result of fetch function
+    const userData = await res.json();
+    return userData;
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
+// POST data
+const post_data = async (url = "", data = {}) => {
+  const req = await fetch(url, {
     method: "POST",
     credentials: "same-origin",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(postData),
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8",
+    },
+    body: JSON.stringify({
+      date: data.date,
+      temp: data.temp,
+      content: data.content,
+    }),
   });
 
   try {
-    const newData = await response.json();
-    const temp = newData.main.temp;
-    console.log(temp);
-    return temp;
+    const data = await req.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const get_data = async (url) => {
+  const response = await fetch(url);
+  const data = await response.json();
+
+  console.log(data.main.temp);
+  date.innerHTML = d;
+  temp.innerHTML = data.main.temp;
+  content.innerHTML = feelings.value;
+};
+get_data(url);
+
+// const form = document.querySelector(".app__form");
+// const icons = document.querySelectorAll(".entry__icon");
+
+const update_UI = async () => {
+  const request = await fetch("/all");
+  try {
+    const data = await request.json();
+    // show icons on the page
+    // icons.forEach((icon) => (icon.style.opacity = "1"));
+    // update new entry values
+    document.getElementById("date").innerHTML = data.date;
+    document.getElementById("temp").innerHTML = data.temp;
+    document.getElementById("content").innerHTML = data.content;
   } catch (error) {
     console.log("error", error);
-    // appropriately handle the error
   }
 };
 
