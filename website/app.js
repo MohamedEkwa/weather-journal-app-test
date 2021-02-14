@@ -17,10 +17,10 @@ const postData = async (url = "") => {
   //   console.log(data);
 
   const response = await fetch(url,  {
-    method: "POST", // *GET, POST, PUT, DELETE, etc.
-    credentials: "same-origin", // include, *same-origin, omit
+    method: "POST",
+    credentials: "same-origin",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(postData), // body data type must match "Content-Type" header
+    body: JSON.stringify(postData),
   });
 
   try {
