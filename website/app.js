@@ -12,11 +12,6 @@ let feelings = document.querySelector("#feelings");
 // When you press 'generate'
 document.getElementById("generate").addEventListener("click", (e) => {
   e.preventDefault();
-  // get user input values
-
-
-
-  // console.log(zip);
   const feelings = document.getElementById("#feelings").value;
   const zip = document.getElementById("#zip");
 
@@ -28,8 +23,6 @@ document.getElementById("generate").addEventListener("click", (e) => {
     .then(function () {
       update_UI();
     });
-  // reset form
-  // form.reset();
 });
 
 // Send user_data to a server
@@ -78,10 +71,6 @@ const get_data = async (url) => {
   content.innerHTML = feelings.value;
 };
 get_data(url);
-
-// const form = document.querySelector(".app__form");
-// const icons = document.querySelectorAll(".entry__icon");
-
 const update_UI = async () => {
   const request = await fetch("/all");
   try {
